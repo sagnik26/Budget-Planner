@@ -3,6 +3,9 @@ import React, { useEffect, useState } from "react";
 import { getDataString, removeItem } from "@/helpers/async-storage";
 import { useRouter } from "expo-router";
 import { client } from "@/utils/kindeConfig";
+import { supabase } from "@/utils/supabaseConfig";
+import Header from "@/components/Header";
+import { Colors } from "@/constants/Colors";
 
 export const Home = () => {
   const router = useRouter();
@@ -21,21 +24,42 @@ export const Home = () => {
     const isLoggedOut = await client.logout();
 
     if (isLoggedOut) {
-      // Need to implement, e.g: redirect user to login screen, etc...
       await removeItem("login");
       router.push("/login");
     }
   };
 
+  const getCategoryList = async () => {
+    const user = await client.getUserDetails();
+    let { data: category, error } = await supabase
+      .from("category")
+      .select("*")
+      .eq("created_by", user.email);
+
+    if (error) {
+      console.error(error);
+      return;
+    }
+
+    if (category) {
+      console.log("DATA ---> ", category);
+    }
+  };
+
   useEffect(() => {
     checkUserAuth();
+    getCategoryList();
   }, []);
 
   return (
-    <View>
-      <Text>Home</Text>
-      {/* {loggedIn !== "true" ? <LoginScreen /> : <Text>Home</Text>} */}
-      <Button title="logout" onPress={handleLogout} />
+    <View
+      style={{
+        padding: 20,
+        backgroundColor: Colors.PRIMARY,
+        height: 150,
+      }}
+    >
+      <Header />
     </View>
   );
 };
