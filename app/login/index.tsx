@@ -27,11 +27,11 @@ export const LoginScreen = () => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <Image source={Images.loginBg} style={styles.bgImage} />
       <View
         style={{
-          backgroundColor: Colors.PRIMARY,
+          backgroundColor: Colors.SPLITWISE_GREEN,
           width: "100%",
           height: "60%",
           paddingTop: 20,
@@ -46,9 +46,9 @@ export const LoginScreen = () => {
         <Text
           style={{
             fontSize: 35,
-            fontWeight: "bold",
             textAlign: "center",
             color: Colors.WHITE,
+            fontFamily: "Outfit-Bold",
           }}
         >
           Personal Budget Planner
@@ -59,6 +59,7 @@ export const LoginScreen = () => {
             textAlign: "center",
             color: Colors.WHITE,
             marginTop: 20,
+            fontFamily: "Outfit-Regular",
           }}
         >
           Stay on Track, Event by Event, Your Personal Budget Planner
@@ -67,23 +68,25 @@ export const LoginScreen = () => {
           <Text
             style={{
               textAlign: "center",
-              color: Colors.PRIMARY,
+              color: Colors.WHITE,
+              fontFamily: "Outfit-Bold",
             }}
           >
-            Login/Signup
+            Login / Signup
           </Text>
         </TouchableOpacity>
         <Text
           style={{
             fontSize: 13,
-            color: Colors.GRAY,
+            color: Colors.WHITE,
             marginTop: 10,
+            fontFamily: "Outfit-Regular",
           }}
         >
           * By login/signup you will agree to our terms and conditions
         </Text>
       </View>
-    </SafeAreaView>
+    </View>
   );
 };
 
@@ -101,7 +104,7 @@ const styles = StyleSheet.create({
     height: 400,
   },
   loginBtn: {
-    backgroundColor: Colors.WHITE,
+    backgroundColor: "#333333",
     padding: 15,
     marginTop: 30,
     borderRadius: 30,

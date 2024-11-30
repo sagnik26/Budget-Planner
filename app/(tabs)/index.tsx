@@ -6,6 +6,9 @@ import { client } from "@/utils/kindeConfig";
 import { supabase } from "@/utils/supabaseConfig";
 import Header from "@/components/Header";
 import { Colors } from "@/constants/Colors";
+import CircularChart from "@/components/CircularChart";
+import AntDesign from "@expo/vector-icons/AntDesign";
+import { Link } from "expo-router";
 
 export const Home = () => {
   const router = useRouter();
@@ -54,16 +57,33 @@ export const Home = () => {
   return (
     <View
       style={{
-        padding: 20,
-        backgroundColor: Colors.PRIMARY,
-        height: 150,
+        flex: 1,
+        position: "relative",
       }}
     >
-      <Header />
+      <View
+        style={{
+          padding: 20,
+          backgroundColor: Colors.SPLITWISE_GREEN,
+          height: 150,
+        }}
+      >
+        <Header />
+        <CircularChart />
+      </View>
+      <Link href={"/add-new-category"} style={styles.addBtnContainer}>
+        <AntDesign name="pluscircle" size={54} color={Colors.SPLITWISE_GREEN} />
+      </Link>
     </View>
   );
 };
 
 export default Home;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  addBtnContainer: {
+    position: "absolute",
+    bottom: 16,
+    right: 16,
+  },
+});

@@ -38,7 +38,17 @@
           "backgroundColor": "#ffffff"
         }
       ],
-      ["expo-secure-store"]
+      ["expo-secure-store"],
+      [
+        "expo-font",
+        {
+          "fonts": [
+            "./assets/fonts/Outfit-Regular.ttf",
+            "./assets/fonts/Outfit-Medium.ttf",
+            "./assets/fonts/Outfit-Bold.ttf"
+          ]
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true

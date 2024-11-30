@@ -51,6 +51,12 @@
     <array>
       <string>$(PRODUCT_BUNDLE_IDENTIFIER).expo.index_route</string>
     </array>
+    <key>UIAppFonts</key>
+    <array>
+      <string>Outfit-Regular.ttf</string>
+      <string>Outfit-Medium.ttf</string>
+      <string>Outfit-Bold.ttf</string>
+    </array>
     <key>UILaunchStoryboardName</key>
     <string>SplashScreen</string>
     <key>UIRequiredDeviceCapabilities</key>

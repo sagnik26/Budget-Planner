@@ -41,9 +41,21 @@ const Header = () => {
         }}
       >
         <View>
-          <Text style={{ color: Colors.WHITE, fontSize: 16 }}>Welcome,</Text>
           <Text
-            style={{ color: Colors.WHITE, fontSize: 20, fontWeight: "bold" }}
+            style={{
+              color: Colors.WHITE,
+              fontSize: 16,
+              fontFamily: "Outfit-Regular",
+            }}
+          >
+            Welcome,
+          </Text>
+          <Text
+            style={{
+              color: Colors.WHITE,
+              fontSize: 20,
+              fontFamily: "Outfit-Bold",
+            }}
           >
             {user?.given_name}
           </Text>
