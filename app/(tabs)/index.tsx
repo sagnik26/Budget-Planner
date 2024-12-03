@@ -1,4 +1,11 @@
-import { StyleSheet, Text, View, Button } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Button,
+  ScrollView,
+  RefreshControl,
+} from "react-native";
 import React, { useEffect, useState } from "react";
 import { getDataString, removeItem } from "@/helpers/async-storage";
 import { useRouter } from "expo-router";
@@ -9,14 +16,16 @@ import { Colors } from "@/constants/Colors";
 import CircularChart from "@/components/CircularChart";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { Link } from "expo-router";
+import CategoryList from "@/components/CategoryList";
 
 export const Home = () => {
   const router = useRouter();
+  const [categoryList, setcategoryList] = useState<any[]>([]);
+  const [loading, setLoading] = useState(false);
 
   const checkUserAuth = async () => {
     const result = await getDataString("login");
 
-    console.log("IS LOGIN---", result);
     if (result !== "true") {
       router.push("/login");
     }
@@ -33,10 +42,11 @@ export const Home = () => {
   };
 
   const getCategoryList = async () => {
+    setLoading(true);
     const user = await client.getUserDetails();
     let { data: category, error } = await supabase
       .from("category")
-      .select("*")
+      .select("*, CategoryItems(*)")
       .eq("created_by", user.email);
 
     if (error) {
@@ -46,12 +56,34 @@ export const Home = () => {
 
     if (category) {
       console.log("DATA ---> ", category);
+      setcategoryList(category);
+      setLoading(false);
     }
   };
 
   useEffect(() => {
     checkUserAuth();
     getCategoryList();
+
+    // listen to realtime changes in db
+    const channels = supabase
+      .channel("custom-all-channel")
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "category" },
+        (payload) => {
+          console.log("PPP", payload);
+          if (payload.eventType === "INSERT") {
+            setcategoryList((prev: any) => [...prev, payload.new]);
+          }
+        }
+      )
+      .subscribe();
+
+    // remove channel subscription after component unmounts
+    return () => {
+      supabase.removeChannel(channels);
+    };
   }, []);
 
   return (
@@ -61,16 +93,32 @@ export const Home = () => {
         position: "relative",
       }}
     >
-      <View
-        style={{
-          padding: 20,
-          backgroundColor: Colors.SPLITWISE_GREEN,
-          height: 150,
-        }}
+      <ScrollView
+        showsHorizontalScrollIndicator={false}
+        showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl
+            onRefresh={() => getCategoryList()}
+            refreshing={loading}
+          />
+        }
       >
-        <Header />
-        <CircularChart />
-      </View>
+        <View
+          style={{
+            padding: 20,
+            backgroundColor: Colors.SPLITWISE_GREEN,
+            height: 150,
+          }}
+        >
+          <Header />
+        </View>
+
+        <View style={{ padding: 20, marginTop: -75 }}>
+          <CircularChart />
+          <CategoryList categoryList={categoryList} />
+        </View>
+      </ScrollView>
+
       <Link href={"/add-new-category"} style={styles.addBtnContainer}>
         <AntDesign name="pluscircle" size={54} color={Colors.SPLITWISE_GREEN} />
       </Link>

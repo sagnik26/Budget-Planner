@@ -17,6 +17,10 @@ export default function Layout() {
               headerTitle: "Add New Category",
             }}
           />
+          <Stack.Screen
+            name="category-detail"
+            options={{ headerShown: false }}
+          />
         </Stack>
       </SafeAreaView>
     </SafeAreaProvider>

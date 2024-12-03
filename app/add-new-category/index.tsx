@@ -13,12 +13,14 @@ import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { supabase } from "@/utils/supabaseConfig";
 import { client } from "@/utils/kindeConfig";
 import { ToastAndroid } from "react-native";
+import { useRouter } from "expo-router";
 
 const AddNewCategory = () => {
   const [selectedIcon, setSelectedIcon] = useState("IC");
   const [selectedColor, setSelectedColor] = useState(Colors.SPLITWISE_GREEN);
   const [categoryName, setCategoryName] = useState("");
   const [totalBudget, setTotalBudget] = useState("");
+  const router = useRouter();
 
   const onCreatecategory = async () => {
     const user = await client.getUserDetails();
@@ -44,6 +46,12 @@ const AddNewCategory = () => {
     if (data) {
       console.log("Inserted data", data);
       ToastAndroid.show("Category Created!", ToastAndroid.TOP);
+      router.replace({
+        pathname: "/category-detail",
+        params: {
+          categoryId: data[0].id,
+        },
+      });
     }
   };
 
