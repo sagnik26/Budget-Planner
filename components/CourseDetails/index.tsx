@@ -1,5 +1,5 @@
-import { StyleSheet, Text, View } from "react-native";
-import React from "react";
+import { StyleSheet, Text, ToastAndroid, View } from "react-native";
+import React, { useEffect, useState } from "react";
 import { Colors } from "@/constants/Colors";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 
@@ -8,6 +8,24 @@ interface Props {
 }
 
 const CourseDetails: React.FC<Props> = ({ categoryData }) => {
+  const [totalCost, setTotalCost] = useState<number>(0);
+  const [percentageTotal, setPercentageTotal] = useState(0);
+
+  const calculateTotalPerc = () => {
+    let total = 0;
+    categoryData?.CategoryItems?.forEach((item: any) => {
+      total = total + item.cost;
+    });
+    setTotalCost(total);
+    const perc = (total / categoryData.assigned_budget) * 100;
+    console.log("PERC", perc);
+    setPercentageTotal(perc);
+  };
+
+  useEffect(() => {
+    categoryData && calculateTotalPerc();
+  }, [categoryData]);
+
   return (
     <View>
       <View style={styles.container}>
@@ -31,14 +49,19 @@ const CourseDetails: React.FC<Props> = ({ categoryData }) => {
       </View>
       {/* Progress Bar */}
       <View style={styles.amountContainer}>
-        <Text style={{ fontFamily: "Outfit-Regular" }}>$500</Text>
+        <Text style={{ fontFamily: "Outfit-Bold" }}>${totalCost}</Text>
         <Text style={{ fontFamily: "Outfit-Regular" }}>
-          Total Budget: {categoryData?.assigned_budget}
+          Total Budget: ${categoryData?.assigned_budget}
         </Text>
       </View>
 
       <View style={styles.progressBarConatainer}>
-        <View style={styles.progressBarSubConatainer}></View>
+        <View
+          style={[
+            styles.progressBarSubConatainer,
+            { width: `${percentageTotal}%` },
+          ]}
+        ></View>
       </View>
     </View>
   );

@@ -1,9 +1,10 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { supabase } from "@/utils/supabaseConfig";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import CourseDetails from "@/components/CourseDetails";
+import CourseItemsList from "@/components/CourseDetails/CourseItemsList";
 
 const CategoryDetail = () => {
   const { categoryId } = useLocalSearchParams();
@@ -34,13 +35,12 @@ const CategoryDetail = () => {
 
   return (
     <View style={{ padding: 20, marginTop: 20 }}>
-      <Ionicons
-        name="arrow-back"
-        size={24}
-        color="black"
-        onPress={() => router.back()}
-      />
+      <TouchableOpacity onPress={() => router.replace("/(tabs)")}>
+        <Ionicons name="arrow-back" size={24} color="black" />
+      </TouchableOpacity>
+
       <CourseDetails categoryData={categoryData} />
+      <CourseItemsList categoryData={categoryData} />
     </View>
   );
 };
